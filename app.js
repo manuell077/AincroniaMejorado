@@ -16,7 +16,7 @@ switch(opcionActividad){
     case 1:
         
         let optativaTarea = parseInt (  prompt("Que prefieres? \n 1.Listar tareas pendientes \n 2.Listar todas las tareas"));
-        
+        //Dependiendo de la opcion que seleccione el usuario ejecutara un modulo 
         if(optativaTarea === 1){
                 const TraerDatos = async()=>{
 
