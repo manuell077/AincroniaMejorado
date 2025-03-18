@@ -1,5 +1,9 @@
+import { getTareas,getUsuario } from "./Tareas/index.js"; //Importamos el modulo de tareas
+
 
 let cont = true; //Declaracion de la variable cont como true para iniciar el ciclo while  
+
+const URL = "https://jsonplaceholder.typicode.com/"; //Se declara la constante de la url del link de direccion del arhivo json
 
 while(cont == true){ //ciclo while que evalua que la variable cont sea true para ejecutar el ciclo repetitivo
 
@@ -11,8 +15,50 @@ switch(opcionActividad){
     //Segun la opcion que seleccione el usuario 
     case 1:
         
-        let optativaTarea =   prompt("Que prefieres? \n 1.Listar tareas pendientes \n 2.Listar todas las tareas");
+        let optativaTarea = parseInt (  prompt("Que prefieres? \n 1.Listar tareas pendientes \n 2.Listar todas las tareas"));
+        
+        if(optativaTarea === 1){
+                const TraerDatos = async()=>{
+
+                    const usuarios = await getUsuario(URL); //Se envia el argumento url al usuario que va hacer la consulta al jso ndel usuairi 
+                    return await Promise.all(usuarios.map(async(user)=>{ //Se recorre el arreglo que nos devulve usuairos
+                         const tareas = await getTareas(URL,user); //se le nevia como parametros el url y la data de users a la funcion getTAREAS 
+                         const tareasPendientes = tareas.filter((palabra)=>palabra.completed == false ) //se filtran las areas que no estan compeltadas 
+                        
+                         return{tareasPendientes} //retorna el reultado 
+              
+                    }))
+              
+              }
+              
+              TraerDatos().then((info)=>{ //Se resuelve la promesa
+                  console.log("Resultado de tareas pendientes")
+                  console.log(info); //Imprime el resultado
+              }) 
+
+            }else if(optativaTarea === 2){
+                const TraerDatos = async()=>{
+
+                    const usuarios = await getUsuario(URL); //Se envia el argumento url al usuario que va hacer la consulta al jso ndel usuairi 
+                    return await Promise.all(usuarios.map(async(user)=>{ //Se recorre el arreglo que nos devulve usuairos
+                         const tareas = await getTareas(URL,user); //se le nevia como parametros el url y la data de users a la funcion getTAREAS 
+                           
+                        
+                         return{tareas} //retorna el reultado 
+              
+                    }))
+              
+              }
+              
+              TraerDatos().then((info)=>{ //Se resuelve la promesa
+                  console.log("Resultado de todas las tareas")
+                  console.log(info); //Imprime el resultado
+              })
+
+            }
+
         break;
+
     case 2:
         let optativaDatos =  prompt("Que prefieres? \n 1.Listar por nombre de usuario \n 2.Listar todos los usuarios con albumnes y fotos");
         break;
@@ -41,4 +87,4 @@ switch(opcionActividad){
 }
 
 //Mensaje de salida
-alert("Programa Finalizado");
+alert("Programa Finalizado ABRIR CONSOLA PARA VER RESULTADOS");

@@ -1,0 +1,1 @@
+export {solicitud} from "./solicitud.js";
