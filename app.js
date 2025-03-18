@@ -1,5 +1,6 @@
 import { getTareas,getUsuario } from "./Tareas/index.js"; //Importamos los modulos de tareas
 import { getUserName,getAlmbum ,getPhoto} from "./Datos/index.js"; //Importamos los modulos de datos
+import { listarPost } from "./Post/index.js";
 
 let cont = true; //Declaracion de la variable cont como true para iniciar el ciclo while  
 
@@ -55,6 +56,8 @@ switch(opcionActividad){
                   console.log(info); //Imprime el resultado
               })
 
+            }else{
+                alert("Selecciona una opcion valida")
             }
 
         break;
@@ -117,6 +120,8 @@ switch(opcionActividad){
                 console.log("Listar todos los usuarios con album y galeria") 
                  console.log(data);
             })
+        }else{
+            alert("Selecciona una opcion valida")
         }
 
 
@@ -124,10 +129,46 @@ switch(opcionActividad){
         break;
         
     case 3:
-        let optativaPost = prompt("Que prefieres? \n 1.Filtrar post por nombre \n 2.Filtrar todos los post ");
+
+        let optativaPost = parseInt(prompt("Que prefieres? \n 1.Filtrar post por nombre \n 2.Filtrar todos los post "));
+
+        if(optativaPost == 1){
+           
+            let nombrePost = prompt("Ingrese el nombre del post")
+            let regex = new RegExp(nombrePost)
+            const obtenerPost = async()=>{
+                
+                const post = await listarPost(URL)
+                const postTitle = post.filter((posteo)=>regex.test(posteo.title))
+                return  postTitle
+            }
+
+            obtenerPost().then((data)=>{
+                console.log("Informacion sobre el post segun el nombre")
+                console.log(data);
+            })
+
+        }else if(optativaPost == 2){
+            
+            const obtenerPost = async()=>{
+                
+                const post = await listarPost(URL)
+                
+                return  post
+            }
+
+            obtenerPost().then((data)=>{
+                console.log("Informacion de todos los post")
+                console.log(data);
+            })
+        }else{
+            alert("Selecciona una opcion valida")
+        }
+
         break;
     case 4:
-        let  optativaTelefono = prompt("Que prefieres \n 1.Consultar todos los usuarios \n 2.Consultar cierto usuario")        
+        let  optativaTelefono = parseInt(prompt("Que prefieres \n 1.Consultar todos los usuarios \n 2.Consultar cierto usuario"))        
+        
         break;
     case 5:
         let optativaInformacion = prompt("Que prefieres \n 1.Consultar por idUsuario \n 2.consultar todos los usuarios")
