@@ -1,5 +1,5 @@
-import { getTareas,getUsuario } from "./Tareas/index.js"; //Importamos el modulo de tareas
-
+import { getTareas,getUsuario } from "./Tareas/index.js"; //Importamos los modulos de tareas
+import { getUserName,getAlmbum ,getPhoto} from "./Datos/index.js"; //Importamos los modulos de datos
 
 let cont = true; //Declaracion de la variable cont como true para iniciar el ciclo while  
 
@@ -58,9 +58,69 @@ switch(opcionActividad){
             }
 
         break;
-
+  
     case 2:
-        let optativaDatos =  prompt("Que prefieres? \n 1.Listar por nombre de usuario \n 2.Listar todos los usuarios con albumnes y fotos");
+        let optativaDatos = parseInt ( prompt("Que prefieres? \n 1.Listar por nombre de usuario \n 2.Listar todos los usuarios con albumnes y fotos"));
+         
+        if(optativaDatos == 1 ){
+            let nombreUsuario = prompt("Ingrese el nombre de usuario"); //Se le pide que ingrese el nombre de usauro para despues pasarlo ocmo parametro
+            const ObtenerDatos = (async()=>{
+       
+                const usuario = await getUserName(URL,nombreUsuario) //Se realiza la consulta en el json
+                return await Promise.all(usuario.map((async(user)=>{
+                    const album = await getAlmbum(URL,user); //Se le pasan como argumentos el url y lo que nos devuelve la callback del arreglo usuario
+                    const albumGaleria = await Promise.all(album.map(async(album) =>{ //Recorremos un nuevo arreglo con map en este caso el de album
+                        const galeria = await getPhoto(URL,album) //Obtenemos la foto 
+                        
+                        return{galeria};   //Retornamos el album con parametro rest porque son muchos albumnes y galeria
+                    }));  
+            
+            
+            
+                    return{...user,albumGaleria} //Retorna los usuarios y las galerias 
+            
+            
+                })));
+            
+            
+            })
+            
+            ObtenerDatos().then(async(data)=>{ //Obtiene los datos y resuelve la promesa 
+                console.log("Listar segun el user name")
+                 console.log(data);
+            })
+           
+        }else if(optativaDatos == 2){
+             //Se le pide que ingrese el nombre de usauro para despues pasarlo ocmo parametro
+            const ObtenerDatos = (async()=>{
+       
+                const usuario = await getUsuario(URL) //Se realiza la consulta en el json
+                return await Promise.all(usuario.map((async(user)=>{
+                    const album = await getAlmbum(URL,user); //Se le pasan como argumentos el url y lo que nos devuelve la callback del arreglo usuario
+                    const albumGaleria = await Promise.all(album.map(async(album) =>{ //Recorremos un nuevo arreglo con map en este caso el de album
+                        const galeria = await getPhoto(URL,album) //Obtenemos la foto 
+                        
+                        return{galeria};   //Retornamos el album con parametro rest porque son muchos albumnes y galeria
+                    }));  
+            
+            
+            
+                    return{...user, albumGaleria} //Retorna los usuarios y las galerias 
+            
+            
+                })));
+            
+            
+            })
+            
+            ObtenerDatos().then(async(data)=>{ //Obtiene los datos y resuelve la promesa
+                console.log("Listar todos los usuarios con album y galeria") 
+                 console.log(data);
+            })
+        }
+
+
+        
         break;
         
     case 3:
