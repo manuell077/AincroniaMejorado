@@ -167,12 +167,33 @@ switch(opcionActividad){
 
         break;
     case 4:
-        let  optativaTelefono = parseInt(prompt("Que prefieres \n 1.Consultar todos los usuarios \n 2.Consultar cierto usuario"))        
+        let  optativaTelefono = parseInt(prompt("Que prefieres \n 1.Consultar todos los usuarios "))        
          
+        if(optativaTelefono == 1){
+         
+            const obtenerInfo = async()=>{
+
+                const usuarios = await getUsuario(URL);
+                return await Promise.all(usuarios.map(async(user)=>{
+                     return{usuario:user.name,
+                        phone:user.phone
+                     }
+           
+                }))
+
+        
+            }
+
+            obtenerInfo().then((resultado)=>{
+                console.log("Usuario y telefono")
+                 console.log(resultado)
+            })
+        }
+        
 
         break;
     case 5:
-        let optativaInformacion = prompt("Que prefieres \n 1.Consultar por idUsuario \n 2.consultar todos los usuarios")
+        let optativaInformacion = prompt("Que prefieres \n 1.Consultar por idUsuario ")
 
         break; 
         
