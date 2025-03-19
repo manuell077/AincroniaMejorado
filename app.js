@@ -135,16 +135,16 @@ switch(opcionActividad){
 
         if(optativaPost == 1){
            
-            let nombrePost = prompt("Ingrese el nombre del post")
-            let regex = new RegExp(nombrePost)
+            let nombrePost = prompt("Ingrese el nombre del post") //Se pide el nombre del post que se va a buscar 
+            let regex = new RegExp(nombrePost) //Se crea un nuevo RegExp que crea una expresion regular con el nombre del post 
             const obtenerPost = async()=>{
                 
-                const post = await listarPost(URL)
-                const postTitle = post.filter((posteo)=>regex.test(posteo.title))
-                return  postTitle
+                const post = await listarPost(URL)//Traemos todos los post 
+                const postTitle = post.filter((posteo)=>regex.test(posteo.title)) //Filtramos con el filter los post que cumplan  con la expresion regular
+                return  postTitle //Retornamos postTitle
             }
 
-            obtenerPost().then((data)=>{
+            obtenerPost().then((data)=>{ //Resolvemos la promesa
                 console.log("Informacion sobre el post segun el nombre")
                 console.log(data);
             })
@@ -153,12 +153,12 @@ switch(opcionActividad){
             
             const obtenerPost = async()=>{
                 
-                const post = await listarPost(URL)
+                const post = await listarPost(URL) //Listamos todos los post
                 
-                return  post
+                return  post //Los retornamos 
             }
 
-            obtenerPost().then((data)=>{
+            obtenerPost().then((data)=>{ //Resolvemos la promesa
                 console.log("Informacion de todos los post")
                 console.log(data);
             })
@@ -172,12 +172,12 @@ switch(opcionActividad){
          
         if(optativaTelefono == 1){
          
-            const obtenerInfo = async()=>{
+            const obtenerInfo = async()=>{ //Metodo asincrono que nos devolvera la promesa 
 
-                const usuarios = await getUsuario(URL);
-                return await Promise.all(usuarios.map(async(user)=>{
+                const usuarios = await getUsuario(URL); //Traemos todos los usuarios 
+                return await Promise.all(usuarios.map(async(user)=>{ //Resolvemos todas las promesas y recorremos el objeto usuarios
                      return{usuario:user.name,
-                        phone:user.phone
+                        phone:user.phone  //Retornamos un nuevo objeto con los valores que nos devuelve el arreglo pasado
                      }
            
                 }))
@@ -185,12 +185,12 @@ switch(opcionActividad){
         
             }
 
-            obtenerInfo().then((resultado)=>{
+            obtenerInfo().then((resultado)=>{ //Resolvemos la promesa 
                 console.log("Usuario y telefono")
                  console.log(resultado)
             })
         }else{
-            alert("Elige una opcion valida")
+            alert("Elige una opcion valida") //En caso de que escriba una opcion no valida 
         }
         
 
@@ -224,6 +224,7 @@ const manejardatos = async () => {//Funcion expresada asincrona donde se manejar
     }));
 };
 manejardatos().then((data)=>{ //Se resuelve la promesa  y se obtiene la data 
+    console.log("Listar todooooo");
     console.log(data); //Se imprime la data osea nuestar busqueda 
 });
         }
