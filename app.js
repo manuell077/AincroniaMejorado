@@ -1,6 +1,7 @@
 import { getTareas,getUsuario } from "./Tareas/index.js"; //Importamos los modulos de tareas
 import { getUserName,getAlmbum ,getPhoto} from "./Datos/index.js"; //Importamos los modulos de datos
 import { listarPost } from "./Post/index.js";
+import { getUsuariosAll,getAlmbunes,getFotos,getComentarios,getPostUsers } from "./Info/index.js";
 
 let cont = true; //Declaracion de la variable cont como true para iniciar el ciclo while  
 
@@ -188,12 +189,44 @@ switch(opcionActividad){
                 console.log("Usuario y telefono")
                  console.log(resultado)
             })
+        }else{
+            alert("Elige una opcion valida")
         }
         
 
         break;
     case 5:
         let optativaInformacion = prompt("Que prefieres \n 1.Consultar por idUsuario ")
+         
+        if(optativaInformacion == 1){
+            let usuarioId= parseInt (prompt("Ingrese el id de usuario que va a buscar")); //valor que ingreso el usuario 
+
+      
+
+
+const manejardatos = async () => {//Funcion expresada asincrona donde se manejaran todos las peticiones 
+    const usuarios =  await getUsuariosAll(URL,usuarioId); //Se hace la solicitud al metodo getUsuarios que tiene la url de nuestra peticion
+    return await Promise.all(usuarios.map(async(usuario)=>{ //Retornamos y esperamos a que se cumplan todas las promesas 
+        const album = await getAlmbunes(URL,usuario); //Se le pasan como argumentos el url y lo que nos devuelve la callback del arreglo usuario
+        const albumGaleria = await Promise.all(album.map(async(album) =>{ //Recorremos un nuevo arreglo con map en este caso el de album
+            const galeria = await getFotos(URL,album) //Obtenemos la foto 
+            
+            return{...album,galeria};   //Retornamos el album con parametro rest porque son muchos albumnes y galeria
+        }));
+        const posts = await getPostUsers(URL,usuario); //Se obtiene el post que recibe como parametro el url y lo que devuelve es lo que se obtiene mediante la callback
+        const comentPost = await Promise.all(posts.map(async(post)=>{ //Se espera a que se resuelvan las promesas que son todos los post que va a traer el metodo getPost
+            const coments = await getComentarios(URL,post); //obtener los comentarios con el metodo getComments 
+            return {...post,coments}; //Retornar dos keys del objeto que nos devuelve post , al ser muchos post se utiliza el aprametro rest porque no se saben cuantos se van a recibir
+        }));
+
+
+        return {...usuario,comentPost,albumGaleria}; //Retornar dos key de ki yqe nos devuelve el map de usuario , una son los usuarios que al ser muchos se pasa parametro rest , y la otra son los comentarios de los post
+    }));
+};
+manejardatos().then((data)=>{ //Se resuelve la promesa  y se obtiene la data 
+    console.log(data); //Se imprime la data osea nuestar busqueda 
+});
+        }
 
         break; 
         
