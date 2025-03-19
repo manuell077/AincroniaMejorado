@@ -168,10 +168,12 @@ switch(opcionActividad){
         break;
     case 4:
         let  optativaTelefono = parseInt(prompt("Que prefieres \n 1.Consultar todos los usuarios \n 2.Consultar cierto usuario"))        
-        
+         
+
         break;
     case 5:
         let optativaInformacion = prompt("Que prefieres \n 1.Consultar por idUsuario \n 2.consultar todos los usuarios")
+
         break; 
         
     case 0: 
